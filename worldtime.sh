@@ -1,10 +1,22 @@
 #!/bin/bash
+#set -x
 
-# Set the time zones to query
-time_zones=(US/Pacific US/Central US/Eastern Europe/Amsterdam Europe/Rome Asia/Hong_Kong)
+# Define the cities and their time zones to display
+CITIES=("San Francisco" "America/Los_Angeles" "Denver" "America/Denver" "New York City" "America/New_York" "Dublin" "Europe/Dublin" "London" "Europe/London" "Amsterdam" "Europe/Amsterdam" "Zurich" "Europe/Zurich" "Bratislava" "Europe/Bratislava" "Warsaw" "Europe/Warsaw")
 
-# Loop over the time zones and print the current time for each one
-for tz in "${time_zones[@]}"; do
-  export TZ=$tz
-  printf "%-12s %s\n" "$tz:" "$(date)"
+# Define the format for the date command
+DATE_FORMAT="%Y-%m-%d %H:%M:%S"
+
+# Loop over the cities and display the current time in each one
+for ((i=0; i<${#CITIES[@]}; i+=2)); do
+  city=${CITIES[$i]}
+  time_zone=${CITIES[$i+1]}
+
+  export TZ=$time_zone
+  # Use the date command to get the current time in the specified time zone
+  #current_time=$(date -u +"$DATE_FORMAT")
+  current_time=$(date)
+
+  # Print the city and the current time
+  printf "%-20s %s\n" "$city:" "$current_time"
 done
