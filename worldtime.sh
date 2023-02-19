@@ -9,7 +9,7 @@ m=wqhWaWN0b3J5IGlzIG5vdCB3aW5uaW5nIGZvciBvdXJzZWx2ZXMsIGJ1dCBmb3Igb3RoZXJzLiAtIF
 DATE_FORMAT="%Y-%m-%d %H:%M:%S"
 
 if [ "$1" == "m" ]; then
-    echo $m | base64 --decode
+    echo -e "\e[32m$(echo $m | base64 --decode)\e[0m"
 else
     # Loop over the cities and display the current time in each one
     for ((i=0; i<${#CITIES[@]}; i+=2)); do
@@ -21,6 +21,6 @@ else
       current_time=$(date)
 
       # Print the city and the current time
-      printf "%-20s %s\n" "$city:" "$current_time"
+      printf "\e[32m%-20s %s\e[0m\n" "$city:" "$current_time"
     done
 fi
