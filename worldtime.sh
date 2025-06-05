@@ -1,26 +1,37 @@
 #!/bin/bash
-#set -x
 
-# Define the cities and their time zones to display
-CITIES=("San Francisco" "America/Los_Angeles" "Denver" "America/Denver" "New York City" "America/New_York" "Dublin" "Europe/Dublin" "London" "Europe/London" "Amsterdam" "Europe/Amsterdam" "Zurich" "Europe/Zurich" "Bratislava" "Europe/Bratislava" "Warsaw" "Europe/Warsaw")
-m=wqhWaWN0b3J5IGlzIG5vdCB3aW5uaW5nIGZvciBvdXJzZWx2ZXMsIGJ1dCBmb3Igb3RoZXJzLiAtIFRoZSBNYW5kYWxvcmlhbsKoCg==
+GREEN='\e[32m'
+NC='\e[0m'
+DATE_FORMAT="+%a %d %b %Y %H:%M:%S"
 
-# Define the format for the date command
-DATE_FORMAT="%Y-%m-%d %H:%M:%S"
+CITIES=(
+  "San Francisco|America/Los_Angeles"
+  "Denver|America/Denver"
+  "New York City|America/New_York"
+  "Dublin|Europe/Dublin"
+  "London|Europe/London"
+  "Amsterdam|Europe/Amsterdam"
+  "Zurich|Europe/Zurich"
+  "Bratislava|Europe/Bratislava"
+  "Warsaw|Europe/Warsaw"
+)
 
-if [ "$1" == "m" ]; then
-    echo -e "\e[32m$(echo $m | base64 --decode)\e[0m"
-else
-    # Loop over the cities and display the current time in each one
-    for ((i=0; i<${#CITIES[@]}; i+=2)); do
-      city=${CITIES[$i]}
-      time_zone=${CITIES[$i+1]}
+display_times() {
+  for entry in "${CITIES[@]}"; do
+    city="${entry%%|*}"
+    tz="${entry##*|}"
+    current_time=$(env TZ="$tz" date "$DATE_FORMAT")
+    zone=$(env TZ="$tz" date +%Z)
+    printf "${GREEN}%-20s %s %s${NC}\n" "$city:" "$current_time" "$zone"
+  done
+}
 
-      export TZ=$time_zone
-      # Use the date command to get the current time in the specified time zone
-      current_time=$(date)
+utility_function() {
+  secret="VmljdG9yeSBpcyBub3Qgd2lubmluZyBmb3Igb3Vyc2VsdmVzLCBidXQgZm9yIG90aGVycy4g4oCTIFRoZSBNYW5kYWxvcmlhbg=="
+  echo -e "${GREEN}$(echo "$secret" | base64 --decode)${NC}"
+}
 
-      # Print the city and the current time
-      printf "\e[32m%-20s %s\e[0m\n" "$city:" "$current_time"
-    done
-fi
+case "$1" in
+  m) utility_function ;;
+  *) display_times ;;
+esac
