@@ -15,6 +15,7 @@ declare -A CITIES=(
   ["Zurich"]="Europe/Zurich"
   ["Bratislava"]="Europe/Bratislava"
   ["Warsaw"]="Europe/Warsaw"
+  ["Bucharest"]="Europe/Bucharest"
 )
 
 DATE_FORMAT="%Y-%m-%d %H:%M:%S"
@@ -72,6 +73,7 @@ ORDERED_CITIES=(
   "Zurich"
   "Bratislava"
   "Warsaw"
+  "Bucharest"
 )
 
 for city in "${ORDERED_CITIES[@]}"; do
